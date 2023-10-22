@@ -20,7 +20,7 @@ const RepoSchema: Schema = new Schema({
     type: Number,
   },
   lastUpdateFrom: {
-    type: Number
+    type: Number,
   },
   snapshotOf: {
     type: Number,
