@@ -29,8 +29,11 @@ router.post('/sign', async (ctx) => {
         username: user.username
       }
       const secretKey = process.env.SECRET || 'AEROBRANCHSECRET@2023'
-      const token = jwt.sign(payload, secretKey, { expiresIn: '2h' })
-      ctx.body = { token };
+      const token = jwt.sign(payload, secretKey, { expiresIn: '12h' })
+      ctx.body = {
+        token,
+        username: user.username
+      };
     } else {
       ctx.body = { errno: 'PWDNM' };
     }
