@@ -19,14 +19,17 @@ const RepoSchema: Schema = new Schema({
   lastUpdate: {
     type: Number,
   },
+  lastUpdateFrom: {
+    type: Number
+  },
   snapshotOf: {
     type: Number,
   },
 });
 
-const RepoModel: Model<InferSchemaType<typeof RepoSchema>> = mongoose.model(
+const Repository: Model<InferSchemaType<typeof RepoSchema>> = mongoose.model(
   'Repository',
   RepoSchema,
 );
 
-export default RepoModel;
+export default Repository;

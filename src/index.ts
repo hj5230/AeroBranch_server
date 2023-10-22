@@ -1,16 +1,15 @@
 import Koa from 'koa';
 import path from 'path';
-// import https from 'https';
+import https from 'https';
 import dotenv from 'dotenv';
-// import bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
 import fs from 'fs';
-// import multer from 'koa-multer'
 
 // import middlewares
 import { bodyParserMiddleware } from './middleware/bodyParserMiddleware';
 import { corsMiddleware } from './middleware/corsMiddleware';
-import { jwtMiddleware } from "./middleware/jwtMiddleware"
+import { jwtMiddleware } from './middleware/jwtMiddleware';
 
 // import routes
 import mainRoutes from './routes/main';
@@ -18,8 +17,10 @@ import testRoutes from './routes/test';
 import loginRoutes from './routes/login';
 
 // import models
-import Device from './model/Device';
 import User from './model/User';
+import Device from './model/Device';
+import Repository from './model/Repository';
+import File from './model/File';
 
 // config dotenv
 dotenv.config({
@@ -53,12 +54,12 @@ const connInfo = process.env.MONGODB_URI || '';
 mongoose.set('strictQuery', true);
 mongoose.connect(connInfo);
 
-// generate a user record into db
+// generate demo records into db
+// const initId = Date.now();
 // bcrypt.genSalt(10, (err, salt) => {
 //   if (err) throw err;
 //   bcrypt.hash('123Qwe,./', salt, (err, hash) => {
 //     if (err) throw err;
-//     const initId = Date.now();
 //     new User({
 //       userId: initId,
 //       username: 'sasha',
@@ -67,12 +68,26 @@ mongoose.connect(connInfo);
 //       repository: [],
 //     }).save();
 //     new Device({
+//       deviceId: initId,
 //       deviceName: 'WUJIE-14',
 //       macAddress: '4c:d5:77:07:91:ef',
 //       belongTo: initId,
 //     }).save();
 //   });
 // });
+// new Repository({
+//   repoId: initId,
+//   repoName: 'demo repository',
+//   belongTo: initId,
+//   files: [initId],
+// }).save();
+// new File({
+//   fileId: initId,
+//   fileName: 'demo_file.txt',
+//   md5: 'v9ahf8f3j8',
+//   belongTo: initId,
+//   chunk: [],
+// }).save();
 
 const app: Koa = new Koa();
 

@@ -9,12 +9,12 @@ const FileSchema: Schema = new Schema({
     type: String,
     required: true,
   },
-  belongTo: {
-    type: Number,
-    required: true,
-  },
   md5: {
     type: String,
+    required: true,
+  },
+  belongTo: {
+    type: Number,
     required: true,
   },
   chunks: {
