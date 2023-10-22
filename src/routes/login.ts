@@ -7,9 +7,9 @@ import Device from '../model/Device';
 
 const router = new Router({ prefix: '/login' });
 
-router.get('/verify_mac/:macaddr', async (ctx) => {
-  const { macaddr } = ctx.params;
-  const device = await Device.findOne({ macAddress: macaddr });
+router.get('/verify/:macAddr', async (ctx) => {
+  const { macAddr } = ctx.params;
+  const device = await Device.findOne({ macAddress: macAddr });
   ctx.body = { macOk: !!device };
 });
 
