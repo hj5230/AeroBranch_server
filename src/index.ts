@@ -10,6 +10,7 @@ import fs from 'fs';
 // import middlewares
 import { bodyParserMiddleware } from './middleware/bodyParserMiddleware';
 import { corsMiddleware } from './middleware/corsMiddleware';
+import { jwtMiddleware } from "./middleware/jwtMiddleware"
 
 // import routes
 import mainRoutes from './routes/main';
@@ -78,6 +79,7 @@ const app: Koa = new Koa();
 // middleware
 app.use(bodyParserMiddleware);
 app.use(corsMiddleware);
+app.use(jwtMiddleware);
 
 // routes
 app.use(mainRoutes.routes()).use(mainRoutes.allowedMethods());
