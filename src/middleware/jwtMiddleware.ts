@@ -1,7 +1,17 @@
 import { Middleware } from 'koa';
 import jwt from 'jsonwebtoken';
 
-const jwtMiddleware: Middleware = async (ctx, next) => {
+// urls exempt from login
+const exempts = [
+  /^\/login\/verify\/.*$/,
+  /^\/login\/sign$/
+];
+
+export const jwtMiddleware: Middleware = async (ctx, next) => {
+  if (exempts.some(e => e.test(ctx.path))) {
+    await next();
+    return;
+  }
   const authHeader = ctx.headers.authorization;
   if (!authHeader) {
     ctx.status = 401;
@@ -24,5 +34,3 @@ const jwtMiddleware: Middleware = async (ctx, next) => {
     ctx.body = { errno: 'APPNS' };
   }
 };
-
-export default jwtMiddleware;
