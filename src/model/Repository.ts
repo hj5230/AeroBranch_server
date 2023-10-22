@@ -16,6 +16,12 @@ const RepoSchema: Schema = new Schema({
   files: {
     type: [Number],
   },
+  lastUpdate: {
+    type: Number,
+  },
+  snapshotOf: {
+    type: Number,
+  },
 });
 
 const RepoModel: Model<InferSchemaType<typeof RepoSchema>> = mongoose.model(
