@@ -1,6 +1,10 @@
 import mongoose, { Schema, InferSchemaType, Model } from 'mongoose';
 
 const DeviceSchema: Schema = new Schema({
+  deviceId: {
+    type: Number,
+    required: true,
+  },
   macAddress: {
     type: String,
     required: true,
