@@ -40,9 +40,9 @@ const UserSchema: Schema = new Schema({
 //   },
 // };
 
-const UserModel: Model<InferSchemaType<typeof UserSchema>> = mongoose.model(
+const User: Model<InferSchemaType<typeof UserSchema>> = mongoose.model(
   'User',
   UserSchema,
 );
 
-export default UserModel;
+export default User;

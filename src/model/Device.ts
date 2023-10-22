@@ -1,15 +1,11 @@
 import mongoose, { Schema, InferSchemaType, Model } from 'mongoose';
 
 const DeviceSchema: Schema = new Schema({
-  deviceId: {
-    type: Number,
-    required: true,
-  },
-  deviceName: {
+  macAddress: {
     type: String,
     required: true,
   },
-  macAddress: {
+  deviceName: {
     type: String,
     required: true,
   },
@@ -19,8 +15,9 @@ const DeviceSchema: Schema = new Schema({
   },
 });
 
-type Device = InferSchemaType<typeof DeviceSchema>;
+const Device: Model<InferSchemaType<typeof DeviceSchema>> = mongoose.model(
+  'Device',
+  DeviceSchema,
+);
 
-const DeviceModel: Model<Device> = mongoose.model('Device', DeviceSchema);
-
-export default DeviceModel;
+export default Device;
