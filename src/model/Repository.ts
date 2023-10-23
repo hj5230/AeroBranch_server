@@ -16,6 +16,9 @@ const RepoSchema: Schema = new Schema({
   files: {
     type: [Number],
   },
+  repoDesp: {
+    type: String
+  },
   lastUpdate: {
     type: Number,
   },
