@@ -1,5 +1,24 @@
 import mongoose, { Schema, InferSchemaType, Model } from 'mongoose';
 
+const StructSchema: Schema = new Schema(
+  {
+    isDir: {
+      type: Boolean,
+      required: true,
+    },
+    dirName: {
+      type: String,
+    },
+    children: {
+      type: [this],
+    },
+    fileId: {
+      type: Number,
+    },
+  },
+  { _id: false },
+);
+
 const RepoSchema: Schema = new Schema({
   repoId: {
     type: Number,
@@ -13,11 +32,11 @@ const RepoSchema: Schema = new Schema({
     type: Number,
     required: true,
   },
-  files: {
-    type: [Number],
+  structure: {
+    type: [StructSchema],
   },
   repoDesp: {
-    type: String
+    type: String,
   },
   lastUpdate: {
     type: Number,
