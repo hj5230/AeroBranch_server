@@ -54,27 +54,34 @@ const connInfo = process.env.MONGODB_URI || '';
 mongoose.set('strictQuery', true);
 mongoose.connect(connInfo);
 
+const createDefaultUserIfNoneExists = async () => {
+  const userCount = await User.countDocuments();
+  if (userCount === 0) {
+    const initId = Date.now();
+    bcrypt.genSalt(10, (err, salt) => {
+      if (err) throw err;
+      bcrypt.hash('Asdf1234.', salt, (err, hash) => {
+        if (err) throw err;
+        new User({
+          userId: initId,
+          username: 'sasha',
+          password: hash,
+          devices: [initId],
+          repository: [],
+        }).save();
+        new Device({
+          deviceId: initId,
+          deviceName: 'WUJIE-14',
+          macAddress: '4c:d5:77:07:91:ef',
+          belongTo: initId,
+        }).save();
+      });
+    });
+  }
+};
+
 // generate demo records into db
-// const initId = Date.now();
-// bcrypt.genSalt(10, (err, salt) => {
-//   if (err) throw err;
-//   bcrypt.hash('123Qwe,./', salt, (err, hash) => {
-//     if (err) throw err;
-//     new User({
-//       userId: initId,
-//       username: 'sasha',
-//       password: hash,
-//       devices: [initId],
-//       repository: [],
-//     }).save();
-//     new Device({
-//       deviceId: initId,
-//       deviceName: 'WUJIE-14',
-//       macAddress: '4c:d5:77:07:91:ef',
-//       belongTo: initId,
-//     }).save();
-//   });
-// });
+createDefaultUserIfNoneExists();
 // new Repository({
 //   repoId: initId,
 //   repoName: 'demo repository',
