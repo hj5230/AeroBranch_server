@@ -8,6 +8,7 @@ const StructSchema: Schema = new Schema(
     },
     dirName: {
       type: String,
+      required: true,
     },
     children: {
       type: [this],
