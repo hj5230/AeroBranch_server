@@ -1,6 +1,6 @@
 import Koa from 'koa';
 import path from 'path';
-import https from 'https';
+// import https from 'https';
 import dotenv from 'dotenv';
 import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
@@ -14,13 +14,13 @@ import { jwtMiddleware } from './middleware/jwtMiddleware';
 // import routes
 import mainRoutes from './routes/main';
 import testRoutes from './routes/test';
-import loginRoutes from './routes/login';
+import UserRoutes from './routes/user';
 
 // import models
 import User from './model/User';
 import Device from './model/Device';
-import Repository from './model/Repository';
-import File from './model/File';
+// import Repository from './model/Repository';
+// import File from './model/File';
 
 // config dotenv
 dotenv.config({
@@ -54,6 +54,7 @@ const connInfo = process.env.MONGODB_URI || '';
 mongoose.set('strictQuery', true);
 mongoose.connect(connInfo);
 
+// generate demo records into db
 const createDefaultUserIfNoneExists = async () => {
   const userCount = await User.countDocuments();
   if (userCount === 0) {
@@ -79,8 +80,6 @@ const createDefaultUserIfNoneExists = async () => {
     });
   }
 };
-
-// generate demo records into db
 createDefaultUserIfNoneExists();
 // new Repository({
 //   repoId: initId,
@@ -106,8 +105,8 @@ app.use(jwtMiddleware);
 // routes
 app.use(mainRoutes.routes()).use(mainRoutes.allowedMethods());
 app.use(testRoutes.routes()).use(testRoutes.allowedMethods());
-app.use(loginRoutes.routes()).use(loginRoutes.allowedMethods());
+app.use(UserRoutes.routes()).use(UserRoutes.allowedMethods());
 
 const PORT = process.env.PORT;
-// https.createServer(options, app.callback()).listen(PORT, () => console.log(`https://localhost:${PORT}`));
 app.listen(PORT, () => console.log(`http://localhost:${PORT}`));
+// https.createServer(options, app.callback()).listen(PORT, () => console.log(`https://localhost:${PORT}`));
