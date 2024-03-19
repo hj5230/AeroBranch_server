@@ -7,7 +7,7 @@ import Device from '../model/Device';
 
 import { SignBody } from '../interface/Ilogin';
 
-const router = new Router({ prefix: '/login' });
+const router = new Router({ prefix: '/user' });
 
 router.get('/verify/:macAddr', async (ctx) => {
   const { macAddr } = ctx.params;
@@ -37,5 +37,10 @@ router.post('/sign', async (ctx) => {
     }
   }
 });
+
+// router.post('/jwt', async (ctx) => {
+//   const { jwt } = ctx.request.body
+
+// });
 
 export default router;
