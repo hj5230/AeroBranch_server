@@ -33,6 +33,9 @@ const RepoSchema: Schema = new Schema({
     type: Number,
     required: true,
   },
+  descripion: {
+    type: String,
+  },
   structure: {
     type: [StructSchema],
   },
