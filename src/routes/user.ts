@@ -5,9 +5,11 @@ import jwt from 'jsonwebtoken';
 import User from '../model/User';
 import Device from '../model/Device';
 
-import { SignBody } from '../interface/Ilogin';
+import { SignBody } from '../interface/Iuser';
 
 const router = new Router({ prefix: '/user' });
+
+const secretKey = process.env.SECRET || 'AEROBRANCHSECRET@2023';
 
 router.get('/verify/:macAddr', async (ctx) => {
   const { macAddr } = ctx.params;
@@ -26,7 +28,6 @@ router.post('/sign', async (ctx) => {
         userId: user.userId,
         username: user.username,
       };
-      const secretKey = process.env.SECRET || 'AEROBRANCHSECRET@2023';
       const token = jwt.sign(payload, secretKey, { expiresIn: '12h' });
       ctx.body = {
         token,
@@ -38,9 +39,16 @@ router.post('/sign', async (ctx) => {
   }
 });
 
-// router.post('/jwt', async (ctx) => {
-//   const { jwt } = ctx.request.body
-
-// });
+router.get('/verify', async (ctx) => {
+  const { authorization } = ctx.headers;
+  if (!authorization) {
+    ctx.body = { errno: 'USRNL' };
+    ctx.status = 401;
+    return;
+  }
+  const token = authorization.split(' ')[1];
+  const info = jwt.verify(token, secretKey);
+  ctx.body = info;
+});
 
 export default router;
