@@ -2,13 +2,10 @@ import { Middleware } from 'koa';
 import jwt from 'jsonwebtoken';
 
 // urls exempt from login
-const exempts = [
-  /^\/login\/verify\/.*$/,
-  /^\/login\/sign$/
-];
+const exempts = [/^\/user\/verify\/.*$/, /^\/user\/sign$/];
 
 export const jwtMiddleware: Middleware = async (ctx, next) => {
-  if (exempts.some(e => e.test(ctx.path))) {
+  if (exempts.some((e) => e.test(ctx.path))) {
     await next();
     return;
   }

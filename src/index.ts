@@ -81,26 +81,13 @@ const createDefaultUserIfNoneExists = async () => {
   }
 };
 createDefaultUserIfNoneExists();
-// new Repository({
-//   repoId: initId,
-//   repoName: 'demo repository',
-//   belongTo: initId,
-//   files: [initId],
-// }).save();
-// new File({
-//   fileId: initId,
-//   fileName: 'demo_file.txt',
-//   md5: 'v9ahf8f3j8',
-//   belongTo: initId,
-//   chunk: [],
-// }).save();
 
 const app: Koa = new Koa();
 
 // middleware
 app.use(bodyParserMiddleware);
 app.use(corsMiddleware);
-app.use(jwtMiddleware);
+// app.use(jwtMiddleware);
 
 // routes
 app.use(mainRoutes.routes()).use(mainRoutes.allowedMethods());
