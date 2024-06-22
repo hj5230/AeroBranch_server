@@ -76,7 +76,7 @@ const createDefaultUserIfNoneExists = async () => {
                 new Device({
                     deviceId: initId,
                     deviceName: "WUJIE-14",
-                    macAddress: "4c:d5:77:07:91:ef",
+                    macAddress: process.env.DEV_HOST_MAC,
                     belongTo: initId,
                 }).save();
             });
