@@ -1,5 +1,5 @@
 {
-  "USRNF": "User not found",
-  "PWDNM": "Password do not match",
-  "USRNL": "User is not logged in"
+    "USRNF": "User not found",
+    "PWDNM": "Password do not match",
+    "USRNL": "User is not logged in"
 }

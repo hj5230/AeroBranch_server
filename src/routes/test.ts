@@ -1,10 +1,10 @@
-import Router from 'koa-router';
-import Device from '../model/Device';
+import Router from "koa-router";
+// import Device from "../model/Device";
 
-const router = new Router({ prefix: '/test' });
+const router = new Router({ prefix: "/test" });
 
-router.get('/', async (ctx) => {
-  ctx.body = 'Welcome to Test';
+router.get("/", async ctx => {
+    ctx.body = "Welcome to Test";
 });
 
 export default router;
