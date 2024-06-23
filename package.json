@@ -8,7 +8,8 @@
         "dev": "nodemon",
         "build": "tsc",
         "lint": "eslint '**/*.{ts, js}' --fix",
-        "format": "prettier --write ."
+        "format": "prettier --write .",
+        "postinstall": "npx husky install"
     },
     "dependencies": {
         "@koa/cors": "^4.0.0",
