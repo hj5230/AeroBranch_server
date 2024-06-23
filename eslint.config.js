@@ -1,10 +1,10 @@
-import globals from "globals";
-import pluginJs from "@eslint/js";
-import tseslint from "typescript-eslint";
-import prettier from "eslint-config-prettier";
-import prettierPlugin from "eslint-plugin-prettier";
+const globals = require("globals");
+const pluginJs = require("@eslint/js");
+const tseslint = require("typescript-eslint");
+const prettier = require("eslint-config-prettier");
+const prettierPlugin = require("eslint-plugin-prettier");
 
-export default [
+module.exports = [
     { files: ["**/*.{ts, js}"] },
     { ignores: ["dist/**", "node_modules/**"] },
     { languageOptions: { globals: globals.node } },
