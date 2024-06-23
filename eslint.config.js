@@ -6,7 +6,7 @@ const prettierPlugin = require("eslint-plugin-prettier");
 
 module.exports = [
     { files: ["**/*.{ts, js}"] },
-    { ignores: ["dist/**", "node_modules/**"] },
+    { ignores: ["dist/**", "node_modules/**", "eslint.config.js"] },
     { languageOptions: { globals: globals.node } },
     pluginJs.configs.recommended,
     ...tseslint.configs.recommended,
