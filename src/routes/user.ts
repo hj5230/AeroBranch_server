@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import User from "../model/User";
 import Device from "../model/Device";
 
-import { SignBody } from "../interface/Iuser";
+import { SignBody } from "../interface/IUser";
 
 const router = new Router({ prefix: "/user" });
 
@@ -29,7 +29,7 @@ router.post("/sign", async ctx => {
                 userId: user.userId,
                 username: user.username,
             };
-            const token = jwt.sign(payload, secretKey, { expiresIn: "12h" });
+            const token = jwt.sign(payload, secretKey, { expiresIn: "48h" });
             ctx.body = {
                 token,
                 username: user.username,
