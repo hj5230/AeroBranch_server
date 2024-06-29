@@ -1,7 +1,7 @@
 /**
  * Main entry point of the server application.
  * It imports necessary modules, sets up middleware, connects to MongoDB,
- * generates demo records if none exists, and starts the server.
+ * generates demo records if none exists (dev env only), and starts the server.
  */
 
 import Koa from "koa";
@@ -24,6 +24,11 @@ import UserRoutes from "./routes/user";
 import User from "./model/User";
 import Device from "./model/Device";
 
+enum EENV {
+    DEV = "dev",
+    PROD = "prod",
+}
+
 /* handle exceptions */
 process.on("unhandledRejection", (reason, promise) => {
     console.error("Unhandled Rejection at:", promise, "reason:", reason);
@@ -32,6 +37,26 @@ process.on("unhandledRejection", (reason, promise) => {
 process.on("uncaughtException", (reason, exception) => {
     console.error("Unhandled Rejection at:", exception, "reason:", reason);
 });
+
+/* config and load env variables from dotenv */
+dotenv.config({
+    path: path.resolve(__dirname, "../.env"),
+    encoding: "utf8",
+    debug: false,
+}).parsed;
+
+const {
+    ENV,
+    PORT,
+    LOG_FILE,
+    // API_HOST,
+    // SECRET,
+    MONGODB_URI,
+    DEV_USER_NAME,
+    DEV_HOST_NAME,
+    DEV_HOST_MAC,
+    DEV_HOST_PWD,
+} = process.env;
 
 /**
  * Create logger instance for logging application events.
@@ -47,27 +72,23 @@ const logger = winston.createLogger({
     ),
     transports: [
         new winston.transports.Console(),
-        new winston.transports.File({ filename: "app.log" }),
+        new winston.transports.File({ filename: LOG_FILE ?? "env.err.log" }),
     ],
 });
 console.log = (msg, ...opts) => logger.info(msg, ...opts);
 console.warn = (msg, ...opts) => logger.warn(msg, ...opts);
 console.error = (msg, ...opts) => logger.error(msg, ...opts);
 
-/* config dotenv */
-dotenv.config({
-    path: path.resolve(__dirname, "../.env"),
-    encoding: "utf8",
-    debug: false,
-}).parsed;
+const START_TIME = Date.now();
+console.log(`Server started at ${new Date(START_TIME).toLocaleString()}`);
 
 /**
  * Connects to MongoDB using the provided connection string.
  * Sets "strictQuery" option to true.
  * Logs a success / error message regarding if connection is successful.
  */
-const connectToMongoDB = async () => {
-    const connInfo = process.env.MONGODB_URI || "";
+(async () => {
+    const connInfo = MONGODB_URI ?? "";
     mongoose.set("strictQuery", true);
     try {
         await mongoose.connect(connInfo);
@@ -75,41 +96,38 @@ const connectToMongoDB = async () => {
     } catch (err) {
         console.error("Failed to connect to MongoDB:", err);
     }
-};
-
-connectToMongoDB();
+})();
 
 /**
  * Generates demo records in the database if no user exists.
  * Creates a default user with a hashed password and a device.
  */
-const createDefaultUserIfNoneExists = async () => {
+(async () => {
     const userCount = await User.countDocuments();
-    if (userCount === 0) {
-        const initId = Date.now();
+    if (ENV === EENV.DEV && userCount === 0) {
         bcrypt.genSalt(10, (err, salt) => {
             if (err) throw err;
-            bcrypt.hash("Asdf1234.", salt, (err, hash) => {
+            bcrypt.hash(DEV_HOST_PWD ?? "DEV_HOST_PWD", salt, (err, hash) => {
                 if (err) throw err;
                 new User({
-                    userId: initId,
-                    username: "sasha",
+                    userId: START_TIME,
+                    username: DEV_USER_NAME ?? "DEV_USER_NAME",
                     password: hash,
-                    devices: [initId],
+                    devices: [START_TIME],
                     repository: [],
                 }).save();
                 new Device({
-                    deviceId: initId,
-                    deviceName: process.env.DEV_HOST_NAME,
-                    macAddress: process.env.DEV_HOST_MAC,
-                    belongTo: initId,
+                    deviceId: START_TIME,
+                    deviceName: DEV_HOST_NAME ?? "DEV_HOST_NAME",
+                    macAddress: DEV_HOST_MAC ?? "DEV_HOST_MAC",
+                    belongTo: START_TIME,
                 }).save();
             });
         });
+        console.log(`Generated demo records. id:${START_TIME}`);
+        console.log(`Demo user: mac:${DEV_HOST_MAC} pwd:${DEV_HOST_PWD}`);
     }
-};
-
-createDefaultUserIfNoneExists();
+})();
 
 const app: Koa = new Koa();
 
@@ -122,5 +140,6 @@ app.use(mainRoutes.routes()).use(mainRoutes.allowedMethods());
 app.use(testRoutes.routes()).use(testRoutes.allowedMethods());
 app.use(UserRoutes.routes()).use(UserRoutes.allowedMethods());
 
-const PORT = process.env.PORT;
-app.listen(PORT, () => console.log(`http://localhost:${PORT}`));
+app.listen(PORT, () =>
+    console.log(`Server running at: 'http://localhost:${PORT}'`),
+);
